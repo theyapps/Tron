@@ -69,71 +69,8 @@ var grid = {
     }
 };
 
-/**
- * Player Structure
- * @type {{x: number, y: number, dx: number, dy: number, color: string, update: Function, change_dir: Function}}
- */
-var player = {
-    x  : GRID_SIZE/2,
-    y  : GRID_SIZE/2 + 1,
-    dx : 1,
-    dy : 0,
-    color: '#c00',
-
-    /**
-     * Update player position.
-     */
-    update:function(){
-        var new_x = player.x + player.dx;
-        var new_y = player.y + player.dy;
-
-        if(new_x * new_y < 0 || new_x > GRID_SIZE - 1 || new_y > GRID_SIZE - 1)
-            return false;
-
-        if(grid.get_cell(new_x,new_y) != EMPTY)
-            return false;
-
-        player.x = new_x;
-        player.y = new_y;
-        grid.set_cell(PLAYER, player.x, player.y);
-        return true;
-
-    },
-
-    /**
-     * Process a change in dir for this player
-     * @param dir
-     */
-    change_dir:function(dir){
-        switch(dir){
-            case DIR_LEFT:
-                if(player.dx != 1) {
-                    player.dx = -1;
-                    player.dy = 0;
-                }
-                break;
-            case DIR_UP:
-                if(player.dy != 1){
-                    player.dx = 0;
-                    player.dy = -1;
-                }
-                break;
-            case DIR_RIGHT:
-                if(player.dx != -1){
-                    player.dx = 1;
-                    player.dy = 0;
-                }
-                break;
-            case DIR_DOWN:
-                if(player.dy != -1){
-                    player.dx = 0;
-                    player.dy = 1;
-                }
-                break;
-        }
-    }
-
-};
+player = new Bike(GRID_SIZE/2, GRID_SIZE/2 + 1, "#c00");
+enemy = new Bike(GRID_SIZE/2,GRID_SIZE/2 - 1, "#0c0");
 
 /**
  * Update Game Logic
@@ -154,6 +91,9 @@ function update() {
 
     if(!player.update()){
         game_state = LOSE;
+    }
+    if(!enemy.update()){
+        game_state = WIN;
     }
 }
 
