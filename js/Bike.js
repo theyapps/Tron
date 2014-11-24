@@ -24,7 +24,7 @@ Bike = function(x,y,color){
 
         player.x = new_x;
         player.y = new_y;
-        grid.set_cell(PLAYER, player.x, player.y);
+        grid.set_cell(this, player.x, player.y);
         return true;
     };
 

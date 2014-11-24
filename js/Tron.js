@@ -70,7 +70,6 @@ var grid = {
 };
 
 player = new Bike(GRID_SIZE/2, GRID_SIZE/2 + 1, "#c00");
-enemy = new Bike(GRID_SIZE/2,GRID_SIZE/2 - 1, "#0c0");
 
 /**
  * Update Game Logic
@@ -92,9 +91,6 @@ function update() {
     if(!player.update()){
         game_state = LOSE;
     }
-    if(!enemy.update()){
-        game_state = WIN;
-    }
 }
 
 /**
@@ -112,7 +108,7 @@ function render() {
                     case EMPTY:
                         ctx.fillStyle = EMPTY_COLOR;
                         break;
-                    case PLAYER:
+                    case player:
                         ctx.fillStyle = player.color;
                         break;
                 }
@@ -128,7 +124,9 @@ function render() {
          */
     }
     else if(game_state === WIN){
-        ctx.fillStyle = "#fff";
+        ctx.fillStyle = "rgba(225,225,225,0.2)";
+        ctx.fillRect(0,0,CELL_SIZE * GRID_SIZE, CELL_SIZE * GRID_SIZE);
+        ctx.fillStyle = "#000";
         ctx.textAlign = "center";
         ctx.textBaseline="middle";
         ctx.fillText(
@@ -136,11 +134,12 @@ function render() {
             (GRID_SIZE * CELL_SIZE)/2, (GRID_SIZE * CELL_SIZE)/2)
     }
     else if(game_state === LOSE){
-        ctx.fillStyle = "#000";
+        ctx.fillStyle = "rgba(225,225,225,0.2)";
         ctx.fillRect(0,0,CELL_SIZE * GRID_SIZE, CELL_SIZE * GRID_SIZE);
-        ctx.fillStyle = "#fff";
+        ctx.fillStyle = "#000";
         ctx.textAlign = "center";
         ctx.textBaseline="middle";
+        ctx.font="30px Arial";
         ctx.fillText(
             "YOU LOSE!!",
             (GRID_SIZE * CELL_SIZE)/2, (GRID_SIZE * CELL_SIZE)/2)
@@ -151,6 +150,7 @@ function render() {
         ctx.fillStyle = "#fff";
         ctx.textAlign = "center";
         ctx.textBaseline="middle";
+        ctx.font="30px Arial";
         ctx.fillText(
             "There has been an error.",
             (GRID_SIZE * CELL_SIZE)/2, (GRID_SIZE * CELL_SIZE)/2)
