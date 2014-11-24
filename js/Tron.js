@@ -13,7 +13,7 @@ var RUNNING = 0, PAUSED = 1, WIN = 2, LOSE = 3;
 
 var canvas = document.getElementById('TronCanvas');
 var ctx = canvas.getContext('2d');
-var game_state = LOSE;
+var game_state = RUNNING;
 
 canvas.width = canvas.height = CELL_SIZE * GRID_SIZE;
 
@@ -71,22 +71,35 @@ var grid = {
 
 /**
  * Player Structure
- * @type {{x: number, y: number, dx: number, dy: number, color: string}}
+ * @type {{x: number, y: number, dx: number, dy: number, color: string, update: Function, change_dir: Function}}
  */
 var player = {
     x  : GRID_SIZE/2,
-    y  : GRID_SIZE/2,
-    dx : 0,
+    y  : GRID_SIZE/2 + 1,
+    dx : 1,
     dy : 0,
     color: '#c00',
+
     /**
      * Update player position.
      */
     update:function(){
-        player.x += player.dx;
-        player.y += player.dy;
+        var new_x = player.x + player.dx;
+        var new_y = player.y + player.dy;
+
+        if(new_x * new_y < 0 || new_x > GRID_SIZE - 1 || new_y > GRID_SIZE - 1)
+            return false;
+
+        if(grid.get_cell(new_x,new_y) != EMPTY)
+            return false;
+
+        player.x = new_x;
+        player.y = new_y;
         grid.set_cell(PLAYER, player.x, player.y);
+        return true;
+
     },
+
     /**
      * Process a change in dir for this player
      * @param dir
@@ -142,15 +155,6 @@ function update() {
     if(!player.update()){
         game_state = LOSE;
     }
-
-    /*if(player.y < 0){
-        grid.init();
-        player.x = GRID_SIZE/2;
-        player.y = GRID_SIZE/2;
-        player.dx = 0;
-        player.dy = 0;
-    }*/
-
 }
 
 /**
@@ -175,11 +179,13 @@ function render() {
                 ctx.fillRect(x * CELL_SIZE,y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
             }
         }
+        /*
         ctx.fillStyle = "#fff";
         ctx.fillText(
             "player.x: " + player.x +
             " player.y: " + player.y,
-            10, GRID_SIZE * CELL_SIZE - 10)
+            10, GRID_SIZE * CELL_SIZE - 10);
+         */
     }
     else if(game_state === WIN){
         ctx.fillStyle = "#fff";
@@ -190,6 +196,8 @@ function render() {
             (GRID_SIZE * CELL_SIZE)/2, (GRID_SIZE * CELL_SIZE)/2)
     }
     else if(game_state === LOSE){
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0,0,CELL_SIZE * GRID_SIZE, CELL_SIZE * GRID_SIZE);
         ctx.fillStyle = "#fff";
         ctx.textAlign = "center";
         ctx.textBaseline="middle";
@@ -198,6 +206,8 @@ function render() {
             (GRID_SIZE * CELL_SIZE)/2, (GRID_SIZE * CELL_SIZE)/2)
     }
     else{
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0,0,CELL_SIZE * GRID_SIZE, CELL_SIZE * GRID_SIZE);
         ctx.fillStyle = "#fff";
         ctx.textAlign = "center";
         ctx.textBaseline="middle";
