@@ -2,12 +2,12 @@
  * Bike Class
  * @constructor
  */
-Bike = function(){
-    this.x  = GRID_SIZE/2;
-    this.y  = GRID_SIZE/2 + 1;
+Bike = function(x,y,color){
+    this.x  = x;
+    this.y  = y;
     this.dx = 1;
     this.dy = 0;
-    this.color = '#c00';
+    this.color = color;
 
     /**
      * Update player position.
