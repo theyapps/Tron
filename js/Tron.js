@@ -26,50 +26,8 @@ window.addEventListener('keyup', function(e) {
     delete keysDown[e.keyCode];
 });
 
-/**
- * Grid Structure
- * @type {{width: number, height: number, _grid: Array, init: Function, set_cell: Function, get_cell: Function}}
- */
-var grid = {
-    width : GRID_SIZE,
-    height : GRID_SIZE,
-    _grid : [],
-
-    /**
-     * Initialize Grid
-     */
-    init : function(){
-        this._grid = [];
-        for(var x = 0; x < GRID_SIZE; x++){
-            this._grid.push([]);
-            for(var y = 0; y < GRID_SIZE; y++){
-                this._grid[x].push(EMPTY);
-            }
-        }
-    },
-
-    /**
-     * Set grid coordinate [x,y] to v
-     * @param v
-     * @param x
-     * @param y
-     */
-    set_cell:function(v,x,y){
-        this._grid[x][y] = v;
-    },
-
-    /**
-     * Get value from cell [x,y]
-     * @param x
-     * @param y
-     * @returns {*}
-     */
-    get_cell:function(x,y){
-        return this._grid[x][y];
-    }
-};
-
-player = new Bike(GRID_SIZE/2, GRID_SIZE/2 + 1, "#c00");
+var grid = new Grid(GRID_SIZE);
+var player = new Bike(GRID_SIZE/2, GRID_SIZE/2 + 1, "#c00");
 
 /**
  * Update Game Logic
@@ -162,7 +120,7 @@ function render() {
  * Initialize Game
  */
 function init(){
-    grid.init();
+    grid.init(EMPTY);
     grid.set_cell(PLAYER, player.x, player.y);
 }
 
