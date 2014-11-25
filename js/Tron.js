@@ -1,7 +1,7 @@
 // Sizes
 var CELL_SIZE = 10, GRID_SIZE =  50;
 // Keys
-var ARROW_LEFT = 37, ARROW_UP = 38, ARROW_RIGHT = 39, ARROW_DOWN = 40;
+var KEY_SPACE = 32, ARROW_LEFT = 37, ARROW_UP = 38, ARROW_RIGHT = 39, ARROW_DOWN = 40;
 // Directions
 var DIR_LEFT = 0, DIR_UP = 1, DIR_RIGHT = 2, DIR_DOWN = 3;
 // Grid States
@@ -21,13 +21,25 @@ canvas.width = canvas.height = CELL_SIZE * GRID_SIZE;
 var keysDown = {};
 window.addEventListener("keydown", function(e) {
     keysDown[e.keyCode] = true;
+    if (KEY_SPACE in keysDown){
+        if(game_state == RUNNING){
+            game_state = PAUSED;
+        }
+        else if(game_state == PAUSED){
+            game_state = RUNNING;
+        }
+        else if(game_state == WIN || game_state == LOSE){
+            init();
+            game_state = RUNNING;
+        }
+    }
 });
 window.addEventListener("keyup", function(e) {
     delete keysDown[e.keyCode];
 });
 
-var grid = new Grid(GRID_SIZE);
-var player = new Bike(GRID_SIZE/2, GRID_SIZE/2 + 1, "#c00");
+var grid;
+var player;
 
 /**
  * Update Game Logic
@@ -45,8 +57,7 @@ function update() {
     if (ARROW_DOWN in keysDown) { // D
         player.change_dir(DIR_DOWN);
     }
-
-    if(!player.update()){
+    if(game_state == RUNNING && !player.update()){
         game_state = LOSE;
     }
 }
@@ -133,6 +144,8 @@ function render() {
  * Initialize Game
  */
 function init(){
+    player = new Bike(GRID_SIZE/2,GRID_SIZE/2+1,"#c00");
+    grid = new Grid(GRID_SIZE);
     grid.init(EMPTY);
     grid.set_cell(PLAYER, player.x, player.y);
 }
