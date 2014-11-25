@@ -11,18 +11,18 @@ var EMPTY_COLOR = "#000";
 // Game States
 var RUNNING = 0, PAUSED = 1, WIN = 2, LOSE = 3;
 
-var canvas = document.getElementById('TronCanvas');
-var ctx = canvas.getContext('2d');
+var canvas = document.getElementById("TronCanvas");
+var ctx = canvas.getContext("2d");
 var game_state = RUNNING;
 
 canvas.width = canvas.height = CELL_SIZE * GRID_SIZE;
 
 // Register Key Listeners
 var keysDown = {};
-window.addEventListener('keydown', function(e) {
+window.addEventListener("keydown", function(e) {
     keysDown[e.keyCode] = true;
 });
-window.addEventListener('keyup', function(e) {
+window.addEventListener("keyup", function(e) {
     delete keysDown[e.keyCode];
 });
 
